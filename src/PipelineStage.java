@@ -1,5 +1,7 @@
-public class PipelineStage {
+class PipelineStage {
 
-    Instruction instruction=null;
-    Boolean hadHazard=false;
+    Instruction instruction = new Instruction("", "", "", "");
+    Boolean hadHazard = false;
+    int Ex_MEMALUResult = 0;
+    int memoryResult = 0;
 }

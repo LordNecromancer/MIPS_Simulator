@@ -1,0 +1,44 @@
+clock number : 10     PC : 0
+
+ IF Instruction null
+ ID Instruction null
+ EX Instruction null
+ MEM Instruction null
+ WB Instruction null
+_____________________________________________________________________________
+IF_ID Pipeline register informaion :
+
+     PC : 0     instruction : null
+_____________________________________________________________________________
+ID_EX Pipeline register informaion :
+
+     PC : 0
+     registerData1 : 0     registerData2 : 0
+     instruction 0-15 : null     instruction 11-15 : null     instruction 16-20 : null
+     RegDst : 0  RegWrite : 0  ALUSrc : 0  PCSrc : 0  MemRead : 0
+     MemWrite : 0  MemToReg : 0  ALUOp0 : 0  ALUOp1 : 0  branch : 0
+_____________________________________________________________________________
+EX_MEM Pipeline register informaion :
+
+     PC : 0     instruction : 0
+     ALU result : 0     add ALU : 0     readRegister2 : 0
+     RegWrite : 0  PCSrc : 0  MemRead : 0
+     MemWrite : 0  MemToReg : 0  branch : 0
+_____________________________________________________________________________
+MEM_WB Pipeline register informaion :
+
+     memory data : 0     instruction : 0     ALU result : 0
+     RegWrite : 0
+     MemToReg : 0
+_____________________________________________________________________________
+Register File : 
+
+     ReadData1 : 0     ReadData2 : 0
+     $t0 : null    =  10
+     $t1 : null    =  0
+     $t2 : null    =  10
+     $t3 : null    =  10
+     $t4 : null    =  0
+     $ra : null    =  0
+     $sp : null    =  0
+_____________________________________________________________________________
