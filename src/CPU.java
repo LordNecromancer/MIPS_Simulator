@@ -4,6 +4,8 @@ public class CPU {
 
     int clockNum = 0;
     int PC = 0;
+    boolean branchBubble=false;
+    int stallNumber=0;
     private ArrayList<Instruction> instructions;
 
     //RegisterFile registerMemory=new RegisterFile();
@@ -62,17 +64,28 @@ public class CPU {
     private void readNextInstruction() {
         if (PC / 4 - 1 < instructions.size()) {
 
+            if (branchBubble && stallNumber < 3) {
+                stallNumber++;
+                if (stallNumber == 3) {
+                    branchBubble = false;
+                    stallNumber = 0;
+                }
+                IF.instruction = null;
+            } else {
+                if (instructions.get(PC / 4 - 1) != null) {
 
-            if (instructions.get(PC / 4 - 1) != null) {
+                    IF.instruction = instructions.get(PC / 4 - 1);
 
-                IF.instruction = instructions.get(PC / 4 - 1);
+                    System.out.println(IF.instruction.getType());
+
+                } else {
+                    IF.instruction = null;
+                }
             }
+            IF_ID.instruction = IF.instruction;
+            IF_ID.PC = PC;
 
-        } else {
-            IF.instruction = null;
         }
-        IF_ID.instruction = IF.instruction;
-        IF_ID.PC = PC;
     }
 
     private void runIFStage() {
@@ -84,6 +97,9 @@ public class CPU {
 
 
             setControlData();
+            if(ID_Ex.branch==1){
+                branchBubble=true;
+            }
             ID_Ex.instruction21_25 = IF_ID.instruction.getBits(6, 11);
             ID_Ex.instruction16_20 = IF_ID.instruction.getBits(11, 16);
             ID_Ex.instruction11_15 = IF_ID.instruction.getBits(16, 21);

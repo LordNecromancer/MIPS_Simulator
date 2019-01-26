@@ -1,8 +1,8 @@
-clock number : 10     PC : 0
+clock number : 7     PC : 0
 
- IF Instruction null
- ID Instruction null
- EX Instruction null
+ IF Instruction 00000001000010100100000000100000
+ ID Instruction 00000001000010100100000000100000
+ EX Instruction 00000001000010100100000000100000
  MEM Instruction null
  WB Instruction null
 _____________________________________________________________________________
@@ -36,8 +36,8 @@ Register File :
      ReadData1 : 0     ReadData2 : 0
      $t0 : null    =  10
      $t1 : null    =  0
-     $t2 : null    =  10
-     $t3 : null    =  10
+     $t2 : null    =  0
+     $t3 : null    =  0
      $t4 : null    =  0
      $ra : null    =  0
      $sp : null    =  0
