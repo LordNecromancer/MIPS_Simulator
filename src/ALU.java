@@ -4,8 +4,13 @@ public class ALU {
     private BaseChanger baseChanger = new BaseChanger();
     private int forwardA = 0;
     private int forwardB = 0;
+    int op1=0;
+    int op2=0;
 
     int calculate(ID_ExPipelineRegister id_ex, PipelineStage ex, int forwardA, int forwardB) {
+        System.out.println("A     "+forwardA);
+        System.out.println("B     "+forwardB);
+
         this.forwardA = forwardA;
         this.forwardB = forwardB;
         this.id_ex = id_ex;
@@ -56,7 +61,8 @@ public class ALU {
         int operand1 = getOperand1();
         int result = 0;
         int operand2 = getOperand2();
-        // System.out.println(operand1 + "    " + operand2);
+        System.out.println(operand1 + "    " + operand2);
+        System.out.println(ex.Ex_MEMALUResult);
 
 
         switch (aluControl) {
@@ -91,6 +97,7 @@ public class ALU {
             operand1 = ex.memoryResult;
 
         }
+        op1=operand1;
         return operand1;
     }
 
@@ -107,6 +114,7 @@ public class ALU {
         } else if (forwardB == 1) {
             operand2 = ex.memoryResult;
         }
+        op2=operand2;
         return operand2;
     }
 

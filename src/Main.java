@@ -5,11 +5,17 @@ import java.util.ArrayList;
 
 public class Main {
     private static CPU cpu;
+    private static InstructionMemory instructionMemory=new InstructionMemory();
     private static BaseChanger baseChanger = new BaseChanger();
 
     public static void main(String[] args) throws IOException {
         ArrayList<String> strings = new ArrayList<>();
         ArrayList<Instruction> instructions = new ArrayList<>();
+        instructions.add(null);
+        instructions.add(null);
+        instructions.add(null);
+
+
         JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
         JFrame load = new JFrame();
         load.setSize(650, 650);
@@ -36,48 +42,70 @@ public class Main {
         cpu = new CPU(clockNum);
 
         stringToInstruction(strings, instructions);
+        cpu.instructionMemory=instructionMemory;
         cpu.run();
         Output output = new Output(cpu);
+        CPUGraphics cpuGraphics=new CPUGraphics(output);
 
     }
 
 
-    public static void stringToInstruction(ArrayList<String> strings, ArrayList<Instruction> instructions) {
+    private static void stringToInstruction(ArrayList<String> strings, ArrayList<Instruction> instructions) {
         for (int i = 0; i < strings.size() - 1; i++) {
             String type = " ";
-            if (strings.get(i).contains(" ")) {
-                type = strings.get(i).substring(0, strings.get(i).indexOf(" "));
+            if (!strings.get(i).contains(":")) {
+                if (strings.get(i).contains(" ")) {
+                    type = strings.get(i).substring(0, strings.get(i).indexOf(" "));
 
-            }
-            String a = "", b = "", c = "";
-            Instruction instruction = null;
-            if (type.equals("add") || type.equals("sub") || type.equals("and") || type.equals("or") || type.equals("nor") || type.equals("slt") || type.equals("beq")) {
-                strings.set(i, strings.get(i).substring(strings.get(i).indexOf(" ") + 1));
-                a = strings.get(i).substring(0, strings.get(i).indexOf(","));
-                strings.set(i, strings.get(i).substring(strings.get(i).indexOf(",") + 1));
-                b = strings.get(i).substring(0, strings.get(i).indexOf(","));
-                strings.set(i, strings.get(i).substring(strings.get(i).indexOf(",") + 1));
-                c = strings.get(i);
-                instruction = new Instruction(type, a, b, c);
-                instruction.binary = getBinarycode(instruction);
-                instructions.add(instruction);
-            }
-            if (type.equals("lw") || type.equals("sw")) {
-                strings.set(i, strings.get(i).substring(strings.get(i).indexOf(" ") + 1));
-                a = strings.get(i).substring(0, strings.get(i).indexOf(","));
-                strings.set(i, strings.get(i).substring(strings.get(i).indexOf(",") + 1));
-                b = strings.get(i).substring(0, strings.get(i).indexOf("("));
-                strings.set(i, strings.get(i).substring(strings.get(i).indexOf("(") + 1));
-                c = strings.get(i).substring(0, strings.get(i).indexOf(")"));
-                instruction = new Instruction(type, a, b, c);
-                instruction.binary = getBinarycode(instruction);
-                instructions.add(instruction);
+                }
+                String a = "", b = "", c = "";
+                Instruction instruction = null;
+                if (type.equals("add") || type.equals("sub") || type.equals("and") || type.equals("or") || type.equals("nor") || type.equals("slt") || type.equals("beq")) {
+                    strings.set(i, strings.get(i).substring(strings.get(i).indexOf(" ") + 1));
+                    a = strings.get(i).substring(0, strings.get(i).indexOf(","));
+                    strings.set(i, strings.get(i).substring(strings.get(i).indexOf(",") + 1));
+                    b = strings.get(i).substring(0, strings.get(i).indexOf(","));
+                    strings.set(i, strings.get(i).substring(strings.get(i).indexOf(",") + 1));
+                    if (type.equals("beq")) {
+                        if (isNumeric(strings.get(i))) {
+                            c = strings.get(i);
+                        } else {
+                            String temp = strings.get(i);
+                            int k = 0;
+                            for (int j = i; j < strings.size(); j++) {
+                                if (strings.get(j).startsWith(temp)) {
+
+                                    c = String.valueOf(4 * k-4);
+                                }
+                                k++;
+                            }
+                        }
+                    }else{
+                        c = strings.get(i);
+                    }
+                    System.out.println("c           " + c);
+                    instruction = new Instruction(type, a, b, c);
+                    instruction.binary = getBinary(instruction);
+                    instructions.add(instruction);
+                }
+                if (type.equals("lw") || type.equals("sw")) {
+                    strings.set(i, strings.get(i).substring(strings.get(i).indexOf(" ") + 1));
+                    a = strings.get(i).substring(0, strings.get(i).indexOf(","));
+                    strings.set(i, strings.get(i).substring(strings.get(i).indexOf(",") + 1));
+                    b = strings.get(i).substring(0, strings.get(i).indexOf("("));
+                    strings.set(i, strings.get(i).substring(strings.get(i).indexOf("(") + 1));
+                    c = strings.get(i).substring(0, strings.get(i).indexOf(")"));
+                    instruction = new Instruction(type, a, b, c);
+                    instruction.binary = getBinary(instruction);
+                    instructions.add(instruction);
+                }
+
+                instructionMemory.setInstructions(instructions);
             }
         }
-        cpu.setInstructions(instructions);
     }
 
-    public static String getBinarycode(Instruction instruction) {
+    public static String getBinary(Instruction instruction) {
         String type = instruction.getType();
         String a = instruction.getA();
         String b = instruction.getB();
@@ -146,5 +174,17 @@ public class Main {
             binarycode = field1 + field2 + field3 + field4;
         }
         return binarycode;
+    }
+    public static boolean isNumeric(String str)
+    {
+        try
+        {
+            double d = Double.parseDouble(str);
+        }
+        catch(NumberFormatException nfe)
+        {
+            return false;
+        }
+        return true;
     }
 }

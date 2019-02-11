@@ -1,16 +1,17 @@
 import java.util.ArrayList;
 
-public class CPU {
+ class CPU {
 
     int clockNum = 0;
-    int PC = 0;
-    boolean branchBubble=false;
-    int stallNumber=0;
-    private ArrayList<Instruction> instructions;
+    int PC = 8;
+    private boolean branchBubble=false;
+    private int stallNumber=0;
+    InstructionMemory instructionMemory;
+    //private ArrayList<Instruction> instructions;
 
     //RegisterFile registerMemory=new RegisterFile();
     private DataMemory dataMemory = new DataMemory();
-    private ALU alu = new ALU();
+    ALU alu = new ALU();
     RegisterFile registerFile = new RegisterFile();
     private BaseChanger baseChanger = new BaseChanger();
     private HazardDetectionUnit hazardDetectionUnit = new HazardDetectionUnit();
@@ -20,6 +21,8 @@ public class CPU {
     PipelineStage Ex = new PipelineStage();
     PipelineStage MEM = new PipelineStage();
     PipelineStage WB = new PipelineStage();
+    int operand1=0;
+    int operand2=0;
 
     IF_IDPipelineRegister IF_ID = new IF_IDPipelineRegister();
     ID_ExPipelineRegister ID_Ex = new ID_ExPipelineRegister();
@@ -38,6 +41,8 @@ public class CPU {
     void run() {
 
         registerFile.registers[8].setData(10);
+        dataMemory.writeData(256,100);
+
 
 
         for (int i = 0; i < clockNum; i++) {
@@ -62,7 +67,7 @@ public class CPU {
     }
 
     private void readNextInstruction() {
-        if (PC / 4 - 1 < instructions.size()) {
+        if (PC / 4 - 1 < instructionMemory.instructions.size()) {
 
             if (branchBubble && stallNumber < 3) {
                 stallNumber++;
@@ -72,20 +77,23 @@ public class CPU {
                 }
                 IF.instruction = null;
             } else {
-                if (instructions.get(PC / 4 - 1) != null) {
+                if (instructionMemory.getInstruction((PC / 4 - 1)) != null) {
 
-                    IF.instruction = instructions.get(PC / 4 - 1);
+                    IF.instruction = instructionMemory.getInstruction(PC / 4 - 1);
+                    System.out.println("                                       "+IF.instruction.getType());
 
-                    System.out.println(IF.instruction.getType());
+
+
 
                 } else {
                     IF.instruction = null;
                 }
             }
-            IF_ID.instruction = IF.instruction;
-            IF_ID.PC = PC;
-
+        }else{
+            IF.instruction=null;
         }
+        IF_ID.instruction = IF.instruction;
+        IF_ID.PC = PC;
     }
 
     private void runIFStage() {
@@ -107,10 +115,10 @@ public class CPU {
             readRegisters();
         } else {
             ID_Ex.MemToReg = 0;
-            ID_Ex.instruction21_25 = null;
-            ID_Ex.instruction16_20 = null;
-            ID_Ex.instruction11_15 = null;
-            ID_Ex.instruction0_15 = null;
+            ID_Ex.instruction21_25 = "00000";
+            ID_Ex.instruction16_20 = "00000";
+            ID_Ex.instruction11_15 = "00000";
+            ID_Ex.instruction0_15 = "0000000000000000";
             ID_Ex.PCSrc = 0;
             ID_Ex.MemRead = 0;
             ID_Ex.MemWrite = 0;
@@ -166,6 +174,8 @@ public class CPU {
         Ex_MEM.MemRead = ID_Ex.MemRead;
         Ex_MEM.MemWrite = ID_Ex.MemWrite;
         int ALUResult = alu.calculate(ID_Ex, Ex, forwardA, forwardB);
+        operand1=alu.op1;
+        operand2=alu.op2;
         Ex_MEM.ALUResult = ALUResult;
         Ex_MEM.branch = ID_Ex.branch;
         setEx_MEMRegisterData2();
@@ -303,7 +313,5 @@ public class CPU {
         return registerFile;
     }
 
-    public void setInstructions(ArrayList<Instruction> instructions) {
-        this.instructions = instructions;
-    }
+
 }

@@ -1,6 +1,6 @@
-public class BaseChanger {
+ class BaseChanger {
 
-    public String changeToBaseTwo(int a) {
+     String changeToBaseTwo(int a) {
         String result = "";
         while (a >= 2) {
             result = "" + (a % 2) + result;
@@ -12,7 +12,7 @@ public class BaseChanger {
         return result;
     }
 
-    public int changeToBaseTen(String a) {
+     int changeToBaseTen(String a) {
         int result = 0;
         if (a != null) {
             for (int i = 0; i < a.length(); i++) {
@@ -22,7 +22,7 @@ public class BaseChanger {
         return result;
     }
 
-    public String Xbit(String a, int digits) {
+    String Xbit(String a, int digits) {
         while (a.length() < digits) {
             a = "0" + a;
         }

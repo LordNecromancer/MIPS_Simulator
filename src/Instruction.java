@@ -13,7 +13,7 @@ public class Instruction {
 
     }
 
-    public String getType() {
+     String getType() {
         return type;
     }
 
@@ -21,7 +21,7 @@ public class Instruction {
         this.type = type;
     }
 
-    public String getA() {
+     String getA() {
         return a;
     }
 

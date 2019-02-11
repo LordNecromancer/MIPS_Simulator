@@ -16,20 +16,24 @@ class ForwardingUnit {
     int forwardA() {
 
         int forward = 0;
-        if (mem_wb.RegWrite == 1 && mem_wb.instruction != 0 && mem_wb.instruction == baseChanger.changeToBaseTen(id_ex.instruction21_25) && !(ex_mem.RegWrite == 1 && (ex_mem.instruction != 0) && (ex_mem.instruction != baseChanger.changeToBaseTen(id_ex.instruction21_25)))) {
-            forward = 1;
-        } else if (ex_mem.RegWrite == 1 && ex_mem.instruction != 0 && ex_mem.instruction == baseChanger.changeToBaseTen(id_ex.instruction21_25)) {
+         if (ex_mem.RegWrite == 1 && ex_mem.instruction != 0 && ex_mem.instruction == baseChanger.changeToBaseTen(id_ex.instruction21_25)) {
             forward = 2;
+        }
+       else if (mem_wb.RegWrite == 1 && mem_wb.instruction != 0 && mem_wb.instruction == baseChanger.changeToBaseTen(id_ex.instruction21_25) ) {
+             //&& !(ex_mem.RegWrite == 1 && (ex_mem.instruction != 0) && (ex_mem.instruction != baseChanger.changeToBaseTen(id_ex.instruction21_25)))
+            forward = 1;
         }
         return forward;
     }
 
     int forwardB() {
         int forward = 0;
-        if (mem_wb.RegWrite == 1 && mem_wb.instruction != 0 && mem_wb.instruction == baseChanger.changeToBaseTen(id_ex.instruction16_20) && !(ex_mem.RegWrite == 1 && (ex_mem.instruction != 0) && (ex_mem.instruction != baseChanger.changeToBaseTen(id_ex.instruction21_25)))) {
-            forward = 1;
-        } else if (ex_mem.RegWrite == 1 && ex_mem.instruction != 0 && ex_mem.instruction == baseChanger.changeToBaseTen(id_ex.instruction16_20)) {
+         if (ex_mem.RegWrite == 1 && ex_mem.instruction != 0 && ex_mem.instruction == baseChanger.changeToBaseTen(id_ex.instruction16_20)) {
             forward = 2;
+        }
+       else if (mem_wb.RegWrite == 1 && mem_wb.instruction != 0 && mem_wb.instruction == baseChanger.changeToBaseTen(id_ex.instruction16_20) ) {
+          //   && !(ex_mem.RegWrite == 1 && (ex_mem.instruction != 0) && (ex_mem.instruction != baseChanger.changeToBaseTen(id_ex.instruction21_25)))
+            forward = 1;
         }
         return forward;
     }

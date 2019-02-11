@@ -1,7 +1,7 @@
 import java.util.HashMap;
 
 class DataMemory {
-    HashMap<Integer, Integer> data = new HashMap<>();
+private     HashMap<Integer, Integer> data = new HashMap<>();
 
     int readData(int aluResult) {
         if (data.get(aluResult) != null && data.containsKey(aluResult))
