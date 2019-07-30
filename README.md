@@ -1,6 +1,6 @@
 # MIPS_Simulator
 
-This program was designed as a project for computer organization and design lesson 
+This program was designed as a project for computer organization and design course
 which is part of the computer science curriculum.
 this project simulates CPU and is not just a MIPS simulator but here it has been adjusted 
 to run MIPS commands.
